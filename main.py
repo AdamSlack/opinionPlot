@@ -1,4 +1,7 @@
 from opinionPlot import OpinionPlot
+import nltk
+
+
 ###################################################
 #                  Main Definition                #
 ###################################################

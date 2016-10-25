@@ -1,7 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 from sklearn.cluster import KMeans
-
+from cvProcessor import CVProcessor
 
 ##################################################
 #               Opinion Plot Class               #
@@ -12,6 +12,9 @@ class OpinionPlot:
         self.people = self.readFile(filePath)
         self.avgPoints = self.compileAvgPoints()
         self.clusters = []
+        self.cvp = CVProcessor(filePath) # CV Tests
+        for i in range(0, len(self.people)):
+            self.people[i].additionalLabel = "Word Count: " + str(self.cvp.CVs[i].wordCount)
 
     def readFile(self, filePath):
         """ Reads file at specified location, populating opinion plot with People """
@@ -83,13 +86,13 @@ class OpinionPlot:
         xs.append(xs[0])
         ys.append(ys[0])
 
-        center = person.avgPoint
+        avg = person.avgPoint
 
-        col = self.calcColour(center, 20, 20)
+        col = self.calcColour(avg, 20, 20)
 
         plt.plot(xs, ys, c=col)
-        plt.plot(center[0], center[1], 'o', c=col)
-        plt.annotate(name, (center[0], center[1]))
+        plt.plot(avg[0], avg[1], 'o', c=col)
+        plt.annotate(name + " " + person.additionalLabel, (avg[0], avg[1]))
 
     def plotAvgOpinions(self, figNum):
         """ Plot the average opinions for each entity """
@@ -105,7 +108,7 @@ class OpinionPlot:
         col = self.calcColour(avg, 20, 20)
 
         plt.plot(avg[0], avg[1], 'o', c=col)
-        plt.annotate(name, (avg[0], avg[1]))
+        plt.annotate(name + " " + person.additionalLabel, (avg[0], avg[1]))
 
     def plotClusters(self, figNum, clusterNum):
         """ Performs K-Means Clustering on the average opinions of each entity"""
@@ -173,10 +176,12 @@ class OpinionPlot:
 #                  Person Class                  #
 ##################################################
 class Person:
-    def __init__(self, name, points):
+
+    def __init__(self, name, points, label=""):
         self.name = name
         self.coordinates = points
         self.avgPoint = self.calcAvg()
+        self.additionalLabel = str(label)
 
     def calcAvg(self):
         xs = []
@@ -188,5 +193,8 @@ class Person:
         avg.append(np.mean(xs))
         avg.append(np.mean(ys))
         return avg
+
+
+
 
 
