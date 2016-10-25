@@ -11,6 +11,7 @@ class OpinionPlot:
     def __init__(self, filePath):
         self.people = self.readFile(filePath)
         self.avgPoints = self.compileAvgPoints()
+        self.clusters = []
 
     def readFile(self, filePath):
         """ Reads file at specified location, populating opinion plot with People """
@@ -189,21 +190,3 @@ class Person:
         return avg
 
 
-##################################################
-#                 Main Definition                #
-##################################################
-def main():
-    """ Main """
-    op = OpinionPlot("data.txt")
-    op.plotOpinions("Opinions")
-    op.plotAvgOpinions("Average Opinions")
-    op.plotClusters("Clusters", 3)
-    op.showPlots()
-
-
-
-##################################################
-#                   Call Main                    #
-##################################################
-if __name__ == '__main__':
-    main()
